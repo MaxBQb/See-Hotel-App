@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">CHotel</string>
+    <string name="hotel_screen_title">Отель</string>
+    <string name="hotel_rank_best">%s Превосходно</string>
+    <string name="tourist_card_title">%1$s турист</string>
+</resources>
