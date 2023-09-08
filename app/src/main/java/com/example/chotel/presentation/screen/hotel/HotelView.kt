@@ -18,7 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +40,8 @@ import com.example.chotel.presentation.components.ImageSlider
 import com.example.chotel.presentation.components.OneLineText
 import com.example.chotel.presentation.components.WideCard
 import com.example.chotel.presentation.screen.destinations.RoomsScreenDestination
+import com.example.chotel.presentation.theme.LightGrayText
+import com.example.chotel.presentation.utils.Rub
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.navigate
@@ -53,9 +54,7 @@ fun HotelScreen(
     navController: NavController,
 ) = CommonScaffold(title = stringResource(R.string.hotel_screen_title)) {
     LazyColumn(
-        Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF6F6F9)),
+        Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         item {
@@ -73,20 +72,20 @@ fun HotelScreen(
                 OneLineText(
                     text = "Madinat Makadi, Safaga Road, Makadi Bay, Египет",
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = Color(0xFF0D72FF),
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 )
                 Row(verticalAlignment = Alignment.Bottom) {
                     OneLineText(
                         modifier = Modifier.height(36.dp),
-                        text = "от 134 673 ₽",
+                        text = stringResource(R.string.hotel_minimal_price, 134673.Rub),
                         style = MaterialTheme.typography.bodyLarge
                     )
                     OneLineText(
                         modifier = Modifier.height(21.dp),
                         text = "за тур с перелётом",
                         style = MaterialTheme.typography.bodyMedium.copy(
-                            color = Color(0xFF828796),
+                            color = LightGrayText,
                             fontWeight = FontWeight(400),
                         )
                     )
@@ -100,7 +99,7 @@ fun HotelScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Text(
-                    text = "Об отеле",
+                    text = stringResource(R.string.hotel_description),
                     style = MaterialTheme.typography.titleMedium
                 )
                 HotelTags(
@@ -121,15 +120,16 @@ fun HotelScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.Top),
                     horizontalAlignment = Alignment.End,
                 ) {
-                    QuickAction("Удобства") {
+                    val divColor = Color(0x26828796)
+                    QuickAction(stringResource(R.string.hotel_facilities)) {
                         Icon(painterResource(R.drawable.vuesax_linear_emoji_happy), null)
                     }
-                    Divider(Modifier.padding(start = 36.dp), color = Color(0x82879626))
-                    QuickAction("Что включено") {
+                    Divider(Modifier.padding(start = 36.dp), color = divColor)
+                    QuickAction(stringResource(R.string.hotel_included_features)) {
                         Icon(painterResource(R.drawable.vuesax_linear_tick_square), null)
                     }
-                    Divider(Modifier.padding(start = 36.dp), color = Color(0x82879626))
-                    QuickAction("Что не включено") {
+                    Divider(Modifier.padding(start = 36.dp), color = divColor)
+                    QuickAction(stringResource(R.string.hotel_missing_features)) {
                         Icon(painterResource(R.drawable.vuesax_linear_close_square), null)
                     }
                 }
@@ -145,14 +145,12 @@ fun HotelScreen(
                         .height(48.dp),
                     shape = RoundedCornerShape(25),
                     onClick = { navController.navigate(RoomsScreenDestination) },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0D72FF))
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "К выбору номера",
+                        text = stringResource(R.string.hotel_choose_room_button),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             lineHeight = 17.6.sp,
-                            color = Color(0xFFFFFFFF),
                             textAlign = TextAlign.Center,
                             letterSpacing = 0.1.sp,
                         )
@@ -184,9 +182,9 @@ private fun QuickAction(
                 )
             )
             Text(
-                text = "Самое необходимое",
+                text = stringResource(R.string.hotel_most_useful),
                 style = MaterialTheme.typography.bodySmall.copy(
-                    color = Color(0xFF828796),
+                    color = LightGrayText,
                 )
             )
         }
@@ -214,7 +212,7 @@ private fun HotelTags(tags: List<String>) {
                     .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 5.dp),
                 text = it,
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = Color(0xFF828796),
+                    color = LightGrayText,
                     textAlign = TextAlign.Center,
                 )
             )
@@ -235,7 +233,7 @@ fun Rating(rating: Int) {
     ) {
         Icon(Icons.Default.Star, null, tint = Color(0xFFFFA800))
         Text(
-            text = stringResource(R.string.hotel_rank_best, rating),
+            text = "$rating Превосходно",
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = Color(0xFFFFA800),
                 textAlign = TextAlign.Center,

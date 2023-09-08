@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,8 @@ import com.example.chotel.presentation.components.ImageSlider
 import com.example.chotel.presentation.components.OneLineText
 import com.example.chotel.presentation.components.WideCard
 import com.example.chotel.presentation.screen.destinations.BookingScreenDestination
+import com.example.chotel.presentation.theme.LightGrayText
+import com.example.chotel.presentation.utils.Rub
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.navigate
 
@@ -49,9 +52,7 @@ fun RoomsScreen(
     navController: NavController,
 ) = CommonScaffold("Steigenberger Makadi", navController) {
     LazyColumn(
-        Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF6F6F9)),
+        Modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -70,39 +71,39 @@ fun RoomsScreen(
                     style = MaterialTheme.typography.titleMedium
                 )
                 HotelTags(listOf("Все включено", "Кондиционер"))
-                Details("Подробнее о номере")
+                Details(stringResource(R.string.room_details))
                 Spacer(Modifier)
                 Row(verticalAlignment = Alignment.Bottom) {
                     OneLineText(
                         modifier = Modifier
                             .height(36.dp)
                             .padding(end = 8.dp),
-                        text = "186 600 ₽",
+                        text = 186600.Rub,
                         style = MaterialTheme.typography.bodyLarge
                     )
                     OneLineText(
                         modifier = Modifier.height(21.dp),
-                        text = "за 7 ночей с перелётом",
+                        text = pluralStringResource(
+                            R.plurals.room_price_for_n_nights, 7, 7
+                        ),
                         style = MaterialTheme.typography.bodyMedium.copy(
-                            color = Color(0xFF828796),
+                            color = LightGrayText,
                             fontWeight = FontWeight(400),
                         )
                     )
                 }
                 Button(
                     modifier = Modifier
-                        .padding(vertical = 12.dp)
+                        .padding(top = 12.dp)
                         .height(48.dp),
                     shape = RoundedCornerShape(25),
                     onClick = { navController.navigate(BookingScreenDestination) },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0D72FF))
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Выбрать номер",
+                        text = stringResource(R.string.room_booking_button),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             lineHeight = 17.6.sp,
-                            color = Color(0xFFFFFFFF),
                             textAlign = TextAlign.Center,
                             letterSpacing = 0.1.sp,
                         )
@@ -127,7 +128,7 @@ private fun Details(title: String) {
         Text(
             text = title,
             style = MaterialTheme.typography.bodyMedium.copy(
-                color = Color(0xFF0D72FF),
+                color = MaterialTheme.colorScheme.primary,
                 textAlign = TextAlign.Center,
             )
         )
@@ -135,7 +136,7 @@ private fun Details(title: String) {
             Icons.Default.KeyboardArrowRight,
             null,
             Modifier.size(24.dp),
-            tint = Color(0xFF0D72FF))
+            tint = MaterialTheme.colorScheme.primary)
     }
 }
 
@@ -156,7 +157,7 @@ private fun HotelTags(tags: List<String>) {
                     .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 5.dp),
                 text = it,
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = Color(0xFF828796),
+                    color = LightGrayText,
                     textAlign = TextAlign.Center,
                 )
             )

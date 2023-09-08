@@ -58,7 +58,7 @@ fun ImageSlider(models: List<*>, placeholder: Painter) = Box {
             .align(Alignment.BottomCenter)
             .padding(8.dp)
             .clip(RoundedCornerShape(25))
-            .background(MaterialTheme.colorScheme.background),
+            .background(MaterialTheme.colorScheme.surface),
         horizontalArrangement = Arrangement.Center
     ) {
         Spacer(modifier = Modifier.size(7.5.dp))

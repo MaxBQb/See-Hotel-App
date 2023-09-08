@@ -4,7 +4,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chotel.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommonTextField(
     value: String,
@@ -44,7 +42,7 @@ fun CommonTextField(
     maxLines: Int = Int.MAX_VALUE,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    val containerColor = Color(0xFFF6F6F9)
+    val containerColor = MaterialTheme.colorScheme.background
     TextField(
         value = value,
         onValueChange = onValueChange,
@@ -60,27 +58,25 @@ fun CommonTextField(
             letterSpacing = 0.75.sp,
         ),
         label = {
-            val style =
-                if (LocalTextStyle.current.fontSize == MaterialTheme.typography.bodySmall.fontSize) TextStyle(
-                    fontSize = 12.sp,
-                    lineHeight = 14.4.sp,
-                    fontFamily = FontFamily(Font(R.font.sf_pro_display)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFFA9ABB7),
-                    letterSpacing = 0.12.sp,
-                ) else TextStyle(
-                    fontSize = 17.sp,
-                    lineHeight = 20.4.sp,
-                    fontFamily = FontFamily(Font(R.font.sf_pro_display)),
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFFA9ABB7),
-                    letterSpacing = 0.17.sp,
-                )
-
-            Text(
-                label,
-                style = style
-            )
+            val style = TextStyle(
+                fontFamily = FontFamily(Font(R.font.sf_pro_display)),
+                fontWeight = FontWeight(400),
+                color = Color(0xFFA9ABB7),
+            ).let {
+                if (LocalTextStyle.current.fontSize == MaterialTheme.typography.bodySmall.fontSize)
+                    it.copy(
+                        fontSize = 12.sp,
+                        lineHeight = 14.4.sp,
+                        letterSpacing = 0.12.sp,
+                    )
+                else
+                    it.copy(
+                        fontSize = 17.sp,
+                        lineHeight = 20.4.sp,
+                        letterSpacing = 0.17.sp,
+                    )
+            }
+            Text(label, style = style)
         },
         placeholder = placeholder,
         leadingIcon = leadingIcon,

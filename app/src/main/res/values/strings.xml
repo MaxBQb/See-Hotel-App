@@ -1,6 +1,55 @@
 <resources>
     <string name="app_name">CHotel</string>
+
+    <!--  Hotel screen  -->
     <string name="hotel_screen_title">Отель</string>
-    <string name="hotel_rank_best">%s Превосходно</string>
-    <string name="tourist_card_title">%1$s турист</string>
+    <string name="hotel_description">Об отеле</string>
+    <string name="hotel_facilities">Удобства</string>
+    <string name="hotel_included_features">Что включено</string>
+    <string name="hotel_missing_features">Что не включено</string>
+    <string name="hotel_choose_room_button">К выбору номера</string>
+    <string name="hotel_most_useful">Самое необходимое</string>
+    <string name="hotel_minimal_price">от %1$s</string>
+
+    <!--  Rooms  -->
+    <string name="room_details">Подробнее о номере</string>
+    <string name="room_booking_button">Выбрать номер</string>
+    <plurals name="room_price_for_n_nights">
+        <item quantity="one">за ночь с перелётом</item>
+        <item quantity="few">за %d ночи с перелётом</item>
+        <item quantity="many">за %d ночей с перелётом</item>
+    </plurals>
+
+    <!--  Booking  -->
+    <string name="book_room_button">Оплатить %1$s</string>
+    <string name="booking_title">Бронирование</string>
+    <string name="booking_departure">Вылет из</string>
+    <string name="booking_arrival">Страна, город</string>
+    <string name="booking_tour_dates">Даты</string>
+    <string name="booking_nights_amount">Кол-во ночей</string>
+    <string name="booking_hotel_name">Отель</string>
+    <string name="booking_room_description">Номер</string>
+    <string name="booking_nutrition">Питание</string>
+    <string name="booking_client_info">Информация о покупателе</string>
+    <string name="booking_client_phone">Номер телефона</string>
+    <string name="booking_client_email">Почта</string>
+    <string name="booking_privacy_notice">Эти данные никому не передаются. После оплаты мы вышли чек на указанный вами номер и почту</string>
+    <string name="booking_add_tourist">Добавить туриста</string>
+    <string name="booking_tour_price">Тур</string>
+    <string name="booking_tour_fuel_price">Топливный сбор</string>
+    <string name="booking_tour_service_price">Сервисный сбор</string>
+    <string name="booking_tour_total_price">К оплате</string>
+    <string name="booking_tourist_card_title">%1$s турист</string>
+    <string name="booking_tourist_name">Имя</string>
+    <string name="booking_tourist_surname">Фамилия</string>
+    <string name="booking_tourist_birthday">Дата рождения</string>
+    <string name="booking_tourist_citizenship">Гражданство</string>
+    <string name="booking_tourist_international_passport_code">Номер загранпаспорта</string>
+    <string name="booking_tourist_international_passport_expiration_date">Срок действия загранпаспорта</string>
+
+    <!--  Order paid  -->
+    <string name="order_paid_title">Заказ оплачен</string>
+    <string name="order_paid_headline">Ваш заказ принят в работу</string>
+    <string name="order_paid_notice">Подтверждение заказа №%1$s может занять некоторое время (от 1 часа до суток). Как только мы получим ответ от туроператора, вам на почту придет уведомление.</string>
+    <string name="order_paid_finish_button">Супер!</string>
 </resources>

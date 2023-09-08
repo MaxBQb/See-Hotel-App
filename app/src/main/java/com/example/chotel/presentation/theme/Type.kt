@@ -17,7 +17,7 @@ val Typography = Typography(
         lineHeight = 36.sp,
         fontFamily = FontFamily(Font(R.font.sf_pro_display)),
         fontWeight = FontWeight(600),
-        color = Color(0xFF000000),
+        color = Color.Black,
     ),
     bodyMedium = TextStyle(
         fontSize = 16.sp,
@@ -36,7 +36,7 @@ val Typography = Typography(
         lineHeight = 21.6.sp,
         fontFamily = FontFamily(Font(R.font.sf_pro_display)),
         fontWeight = FontWeight(500),
-        color = Color(0xFF000000),
+        color = Color.Black,
         textAlign = TextAlign.Center,
     ),
     titleMedium = TextStyle(
@@ -44,7 +44,7 @@ val Typography = Typography(
         lineHeight = 26.4.sp,
         fontFamily = FontFamily(Font(R.font.sf_pro_display)),
         fontWeight = FontWeight(500),
-        color = Color(0xFF000000),
+        color = Color.Black,
     )
     /* Other default text styles to override
     labelSmall = TextStyle(

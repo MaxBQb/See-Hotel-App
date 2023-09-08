@@ -22,7 +22,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,6 +47,8 @@ import com.example.chotel.presentation.components.PhoneNumberField
 import com.example.chotel.presentation.components.WideCard
 import com.example.chotel.presentation.screen.destinations.OrderPaidScreenDestination
 import com.example.chotel.presentation.screen.hotel.Rating
+import com.example.chotel.presentation.theme.LightGrayText
+import com.example.chotel.presentation.utils.Rub
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.navigate
 
@@ -65,11 +66,9 @@ data class TouristCardState(
 @Composable
 fun BookingScreen(
     navController: NavController,
-) = CommonScaffold("Бронирование", navController) {
+) = CommonScaffold(stringResource(R.string.booking_title), navController) {
     LazyColumn(
-        Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF6F6F9)),
+        Modifier.fillMaxSize(),
         contentPadding = PaddingValues(top = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -86,7 +85,7 @@ fun BookingScreen(
                 OneLineText(
                     text = "Madinat Makadi, Safaga Road, Makadi Bay, Египет",
                     style = MaterialTheme.typography.bodySmall.copy(
-                        color = Color(0xFF0D72FF),
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 )
             }
@@ -100,13 +99,13 @@ fun BookingScreen(
             ) {
                 Table(
                     mapOf(
-                        "Вылет из" to "Санкт-Петербург",
-                        "Страна, город" to "Египет, Хургада",
-                        "Даты" to "19.09.2023 – 27.09.2023",
-                        "Кол-во ночей" to "7 ночей",
-                        "Отель" to "Steigenberger Makadi",
-                        "Номер" to "Стандартный с видом на бассейн или сад",
-                        "Питание" to "Все включено",
+                        stringResource(R.string.booking_departure) to "Санкт-Петербург",
+                        stringResource(R.string.booking_arrival) to "Египет, Хургада",
+                        stringResource(R.string.booking_tour_dates) to "19.09.2023 – 27.09.2023",
+                        stringResource(R.string.booking_nights_amount) to "7 ночей",
+                        stringResource(R.string.booking_hotel_name) to "Steigenberger Makadi",
+                        stringResource(R.string.booking_room_description) to "Стандартный с видом на бассейн или сад",
+                        stringResource(R.string.booking_nutrition) to "Все включено",
                     )
                 )
             }
@@ -119,26 +118,26 @@ fun BookingScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
-                    text = "Информация о покупателе",
+                    text = stringResource(R.string.booking_client_info),
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Spacer(Modifier)
                 PhoneNumberField(
                     value = "9515559900",
                     onValueChange = { },
-                    label = "Номер телефона",
+                    label = stringResource(R.string.booking_client_phone),
                 )
                 CommonTextField(
                     value = "examplemail.000@mail.ru",
                     onValueChange = { },
-                    label = "Почта",
+                    label = stringResource(R.string.booking_client_email),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 )
                 Text(
-                    text = "Эти данные никому не передаются. После оплаты мы вышли чек на указанный вами номер и почту",
+                    text = stringResource(R.string.booking_privacy_notice),
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontWeight = FontWeight(400),
-                        color = Color(0xFF828796),
+                        color = LightGrayText
                     )
                 )
             }
@@ -161,7 +160,7 @@ fun BookingScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Добавить туриста",
+                        text = stringResource(R.string.booking_add_tourist),
                         style = MaterialTheme.typography.titleMedium,
                     )
                     Spacer(Modifier.weight(1f))
@@ -169,12 +168,15 @@ fun BookingScreen(
                         { },
                         Modifier
                             .padding(end = 8.dp)
-                            .background(Color(0xFF0D72FF), shape = RoundedCornerShape(size = 6.dp))
+                            .background(
+                                MaterialTheme.colorScheme.primary,
+                                RoundedCornerShape(size = 6.dp)
+                            )
                             .size(32.dp)
                     ) {
                         Icon(
                             Icons.Default.Add, null,
-                            tint = MaterialTheme.colorScheme.background
+                            tint = MaterialTheme.colorScheme.surface
                         )
                     }
                 }
@@ -201,14 +203,12 @@ fun BookingScreen(
                         .height(48.dp),
                     shape = RoundedCornerShape(25),
                     onClick = { navController.navigate(OrderPaidScreenDestination) },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF0D72FF))
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Оплатить 198 036 ₽",
+                        text = stringResource(R.string.book_room_button, 198036.Rub),
                         style = MaterialTheme.typography.bodyMedium.copy(
                             lineHeight = 17.6.sp,
-                            color = Color(0xFFFFFFFF),
                             textAlign = TextAlign.Center,
                             letterSpacing = 0.1.sp,
                         )
@@ -223,27 +223,28 @@ fun BookingScreen(
 private fun PriceList() {
     val firstStyle = MaterialTheme.typography.bodyMedium.copy(
         fontWeight = FontWeight(400),
-        color = Color(0xFF828796),
+        color = LightGrayText,
     )
     val secondStyle = firstStyle.copy(
-        color = Color(0xFF000000),
+        color = Color.Black,
         textAlign = TextAlign.End
     )
     for ((first, second) in mapOf(
-        "Тур" to "186 600 ₽",
-        "Топливный сбор" to "9 300 ₽",
-        "Сервисный сбор" to "2 136 ₽",
+        stringResource(R.string.booking_tour_price) to 186600.Rub,
+        stringResource(R.string.booking_tour_fuel_price) to 9300.Rub,
+        stringResource(R.string.booking_tour_service_price) to 2136.Rub,
     ))
         Row {
             Text(first, Modifier.weight(1f), style = firstStyle)
             Text(second, Modifier.weight(1f), style = secondStyle)
         }
     Row {
-        Text("К оплате", Modifier.weight(1f), style = firstStyle)
+        Text(stringResource(R.string.booking_tour_total_price), Modifier.weight(1f), style = firstStyle)
         Text(
-            "198 036 ₽", Modifier.weight(1f), style = secondStyle.copy(
+            198036.Rub,
+            Modifier.weight(1f), style = secondStyle.copy(
                 fontWeight = FontWeight(600),
-                color = Color(0xFF0D72FF),
+                color = MaterialTheme.colorScheme.primary,
             )
         )
     }
@@ -252,7 +253,7 @@ private fun PriceList() {
 @Composable
 private fun TouristCardListItem(i: Int, card: TouristCardState) {
     val ordinal = (i + 1).toOrdinal().replaceFirstChar { it.uppercase() }
-    TouristCard(card, stringResource(R.string.tourist_card_title, ordinal))
+    TouristCard(card, stringResource(R.string.booking_tourist_card_title, ordinal))
 }
 
 @Composable
@@ -285,32 +286,32 @@ private fun TouristCard(state: TouristCardState, title: String) {
                 CommonTextField(
                     value = state.name,
                     onValueChange = {},
-                    label = "Имя",
+                    label = stringResource(R.string.booking_tourist_name),
                 )
                 CommonTextField(
                     value = state.surname,
                     onValueChange = {},
-                    label = "Фамилия",
+                    label = stringResource(R.string.booking_tourist_surname),
                 )
                 CommonTextField(
                     value = state.birthday,
                     onValueChange = {},
-                    label = "Дата рождения",
+                    label = stringResource(R.string.booking_tourist_birthday),
                 )
                 CommonTextField(
                     value = state.citizenship,
                     onValueChange = {},
-                    label = "Гражданство",
+                    label = stringResource(R.string.booking_tourist_citizenship),
                 )
                 CommonTextField(
                     value = state.internationalPassportCode,
                     onValueChange = {},
-                    label = "Номер загранпаспорта",
+                    label = stringResource(R.string.booking_tourist_international_passport_code),
                 )
                 CommonTextField(
                     value = state.internationalPassportExpirationDate,
                     onValueChange = {},
-                    label = "Срок действия загранпаспорта",
+                    label = stringResource(R.string.booking_tourist_international_passport_expiration_date),
                 )
             }
         }
@@ -326,13 +327,13 @@ private fun ExpandToggle(
         { onValueChange(!expanded) },
         Modifier
             .padding(end = 8.dp)
-            .background(Color(0x1A0D72FF), shape = RoundedCornerShape(size = 6.dp))
+            .background(Color(0x1A0D72FF), RoundedCornerShape(size = 6.dp))
             .size(32.dp)
     ) {
         Icon(
             if (expanded) Icons.Default.KeyboardArrowUp
             else Icons.Default.KeyboardArrowDown, null,
-            tint = Color(0xFF0D72FF)
+            tint = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -344,9 +345,9 @@ private fun Table(
 ) {
     val firstStyle = MaterialTheme.typography.bodyMedium.copy(
         fontWeight = FontWeight(400),
-        color = Color(0xFF828796),
+        color = LightGrayText,
     )
-    val secondStyle = firstStyle.copy(color = Color(0xFF000000))
+    val secondStyle = firstStyle.copy(color = Color.Black)
     for ((first, second) in values)
         Row {
             Text(
