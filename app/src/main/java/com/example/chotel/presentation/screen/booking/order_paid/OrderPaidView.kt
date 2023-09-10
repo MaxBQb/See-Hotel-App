@@ -16,6 +16,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -33,12 +35,15 @@ import com.example.chotel.presentation.theme.LightGrayText
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.navigate
 import com.ramcosta.composedestinations.navigation.popUpTo
+import org.koin.androidx.compose.getViewModel
 
 @Destination
 @Composable
 fun OrderPaidScreen(
     navController: NavController,
+    viewModel: OrderPaidViewModel = getViewModel()
 ) = CommonScaffold(stringResource(R.string.order_paid_title), navController) {
+    val uiState by viewModel.uiState.collectAsState()
     Column(
         Modifier
             .fillMaxSize()
@@ -73,7 +78,10 @@ fun OrderPaidScreen(
                 textAlign = TextAlign.Center
             )
             Text(
-                text = stringResource(R.string.order_paid_notice, 104893),
+                text = stringResource(
+                    R.string.order_paid_notice,
+                    uiState.orderId,
+                ),
                 style = MaterialTheme.typography.bodyMedium.copy(
                     fontWeight = FontWeight(400),
                     color = LightGrayText,
