@@ -8,7 +8,19 @@ data class TouristPresentationDTO(
     val internationalPassportCode: String = "",
     val internationalPassportExpirationDate: String = "",
     val expanded: Boolean = true,
-)
+) {
+    companion object {
+        val Empty = TouristPresentationDTO()
+    }
 
-val EmptyTouristPresentationDTO = TouristPresentationDTO()
-val TouristPresentationDTO.isEmpty get() = this.copy(expanded=true) == EmptyTouristPresentationDTO
+    val isEmpty
+        get() = name.isBlank() && surname.isBlank()
+                && birthday.isBlank() && citizenship.isBlank()
+                && internationalPassportCode.isBlank()
+                && internationalPassportExpirationDate.isBlank()
+    val isFilled
+        get() = name.isNotBlank() && surname.isNotBlank()
+                && birthday.isNotBlank() && citizenship.isNotBlank()
+                && internationalPassportCode.isNotBlank()
+                && internationalPassportExpirationDate.isNotBlank()
+}

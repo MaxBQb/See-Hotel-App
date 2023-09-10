@@ -11,10 +11,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
@@ -23,6 +28,7 @@ import androidx.navigation.NavController
 fun CommonScaffold(
     title: String,
     navController: NavController? = null,
+    snackbarState: SnackbarHostState = remember { SnackbarHostState() },
     content: @Composable () -> Unit,
 ) = Scaffold(
     topBar = {
@@ -41,6 +47,19 @@ fun CommonScaffold(
                 )
             }
         )
+    },
+    snackbarHost = {
+        SnackbarHost(snackbarState) {
+            Snackbar(
+                it,
+                containerColor = lerp(
+                    MaterialTheme.colorScheme.surface,
+                    MaterialTheme.colorScheme.primary,
+                    0.1f,
+                ).copy(alpha = 0.9f),
+                contentColor = MaterialTheme.colorScheme.onBackground,
+            )
+        }
     }
 ) {
     Box(

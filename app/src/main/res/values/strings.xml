@@ -47,6 +47,7 @@
     <string name="booking_tourist_citizenship">Гражданство</string>
     <string name="booking_tourist_international_passport_code">Номер загранпаспорта</string>
     <string name="booking_tourist_international_passport_expiration_date">Срок действия загранпаспорта</string>
+    <string name="booking_error_empty_fields">Не все поля заполнены</string>
 
     <!--  Order paid  -->
     <string name="order_paid_title">Заказ оплачен</string>

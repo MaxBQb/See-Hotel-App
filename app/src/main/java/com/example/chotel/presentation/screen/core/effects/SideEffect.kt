@@ -1,7 +1,6 @@
 package com.example.chotel.presentation.screen.core.effects
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.NonRestartableComposable
 import kotlinx.coroutines.CoroutineScope

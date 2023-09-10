@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.chotel.R
 
+
 @Composable
 fun CommonTextField(
     value: String,
@@ -82,7 +83,7 @@ fun CommonTextField(
         leadingIcon = leadingIcon,
         trailingIcon = trailingIcon,
         supportingText = supportingText,
-        isError = isError,
+        isError = false,
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
@@ -92,7 +93,9 @@ fun CommonTextField(
         shape = RoundedCornerShape(16.dp),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = containerColor,
-            unfocusedContainerColor = containerColor,
+            unfocusedContainerColor =
+                if (isError) Color(0x26EB5757)
+                else containerColor,
             disabledContainerColor = containerColor,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,

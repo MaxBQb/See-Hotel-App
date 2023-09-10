@@ -25,14 +25,17 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -49,7 +52,8 @@ import com.example.chotel.presentation.components.PhoneNumberField
 import com.example.chotel.presentation.components.WideCard
 import com.example.chotel.presentation.model.RoomBookingDetailsPresentationDTO
 import com.example.chotel.presentation.model.TouristPresentationDTO
-import com.example.chotel.presentation.model.isEmpty
+import com.example.chotel.presentation.screen.core.effects.EffectKey
+import com.example.chotel.presentation.screen.core.effects.SideEffect
 import com.example.chotel.presentation.screen.destinations.OrderPaidScreenDestination
 import com.example.chotel.presentation.screen.hotel.HotelCard
 import com.example.chotel.presentation.theme.LightGrayText
@@ -64,167 +68,189 @@ import com.example.chotel.presentation.screen.booking.BookingContract as Ui
 fun BookingScreen(
     navController: NavController,
     viewModel: BookingViewModel = getViewModel()
-) = CommonScaffold(stringResource(R.string.booking_title), navController) {
-    val uiState by viewModel.uiState.collectAsState()
-    val bookingDetails = uiState.bookingDetails ?: return@CommonScaffold
-    val onEvent = viewModel::onEvent
-    LazyColumn(
-        Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(top = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        item {
-            WideCard(
-                Modifier.padding(vertical = 16.dp),
-                shape = RoundedCornerShape(16.dp),
-            ) {
-                HotelCard(hotel = bookingDetails.hotel)
+) {
+    val snackbarState = remember { SnackbarHostState() }
+    CommonScaffold(stringResource(R.string.booking_title), navController, snackbarState) {
+        val uiState by viewModel.uiState.collectAsState()
+        val bookingDetails = uiState.bookingDetails ?: return@CommonScaffold
+        val onEvent = viewModel::onEvent
+        LazyColumn(
+            Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(top = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            item {
+                WideCard(
+                    Modifier.padding(vertical = 16.dp),
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    HotelCard(hotel = bookingDetails.hotel)
+                }
             }
-        }
 
-        item {
-            WideCard(
-                Modifier.padding(vertical = 16.dp),
-                shape = RoundedCornerShape(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Table(
-                    mapOf(
-                        stringResource(R.string.booking_departure) to bookingDetails.departureCountry,
-                        stringResource(R.string.booking_arrival) to bookingDetails.arrivalCountry,
-                        stringResource(R.string.booking_tour_dates) to bookingDetails.tourDatesSpan,
-                        stringResource(R.string.booking_nights_amount) to pluralStringResource(
-                            R.plurals.booking_nights_amount,
-                            bookingDetails.nightsAmount,
-                            bookingDetails.nightsAmount,
-                        ),
-                        stringResource(R.string.booking_hotel_name) to bookingDetails.hotel.name,
-                        stringResource(R.string.booking_room_description) to bookingDetails.room,
-                        stringResource(R.string.booking_nutrition) to bookingDetails.nutrition,
+            item {
+                WideCard(
+                    Modifier.padding(vertical = 16.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Table(
+                        mapOf(
+                            stringResource(R.string.booking_departure) to bookingDetails.departureCountry,
+                            stringResource(R.string.booking_arrival) to bookingDetails.arrivalCountry,
+                            stringResource(R.string.booking_tour_dates) to bookingDetails.tourDatesSpan,
+                            stringResource(R.string.booking_nights_amount) to pluralStringResource(
+                                R.plurals.booking_nights_amount,
+                                bookingDetails.nightsAmount,
+                                bookingDetails.nightsAmount,
+                            ),
+                            stringResource(R.string.booking_hotel_name) to bookingDetails.hotel.name,
+                            stringResource(R.string.booking_room_description) to bookingDetails.room,
+                            stringResource(R.string.booking_nutrition) to bookingDetails.nutrition,
+                        )
                     )
-                )
+                }
             }
-        }
 
-        item {
-            WideCard(
-                Modifier.padding(vertical = 16.dp),
-                shape = RoundedCornerShape(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.booking_client_info),
-                    style = MaterialTheme.typography.titleMedium,
-                )
-                Spacer(Modifier)
-                PhoneNumberField(
-                    value = uiState.contactInfo.phone,
-                    onValueChange = { onEvent(Ui.Event.PhoneChanged(it)) },
-                    label = stringResource(R.string.booking_client_phone),
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                CommonTextField(
-                    value = uiState.contactInfo.email,
-                    onValueChange = { onEvent(Ui.Event.EmailChanged(it)) },
-                    label = stringResource(R.string.booking_client_email),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    modifier = Modifier.fillMaxWidth(),
-                )
-                Text(
-                    text = stringResource(R.string.booking_privacy_notice),
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontWeight = FontWeight(400),
-                        color = LightGrayText
-                    )
-                )
-            }
-        }
-        itemsIndexed(uiState.tourists) { i, card ->
-            val ordinal = (i + 1).toOrdinal().replaceFirstChar { it.uppercase() }
-            AnimateAppearance(initiallyVisible = !card.isEmpty || i != uiState.tourists.lastIndex) {
-                TouristCard(
-                    card,
-                    stringResource(R.string.booking_tourist_card_title, ordinal),
-                    { onEvent(Ui.Event.TouristChanged.ExpansionToggled(i)) },
-                    { onEvent(Ui.Event.TouristChanged.NameChanged(it, i)) },
-                    { onEvent(Ui.Event.TouristChanged.SurnameChanged(it, i)) },
-                    { onEvent(Ui.Event.TouristChanged.BirthdayChanged(it, i)) },
-                    { onEvent(Ui.Event.TouristChanged.CitizenshipChanged(it, i)) },
-                    { onEvent(Ui.Event.TouristChanged.InternationalPassportCodeChanged(it, i)) },
-                    { onEvent(Ui.Event.TouristChanged
-                                .InternationalPassportExpirationDateChanged(it, i)) },
-                )
-            }
-        }
-
-        item {
-            WideCard(
-                Modifier.padding(vertical = 16.dp),
-                shape = RoundedCornerShape(16.dp),
-            ) {
-                Row(
-                    Modifier.height(32.dp),
-                    verticalAlignment = Alignment.CenterVertically
+            item {
+                WideCard(
+                    Modifier.padding(vertical = 16.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
-                        text = stringResource(R.string.booking_add_tourist),
+                        text = stringResource(R.string.booking_client_info),
                         style = MaterialTheme.typography.titleMedium,
                     )
-                    Spacer(Modifier.weight(1f))
-                    IconButton(
-                        { onEvent(Ui.Event.AddTourist) },
-                        Modifier
-                            .padding(end = 8.dp)
-                            .background(
-                                MaterialTheme.colorScheme.primary,
-                                RoundedCornerShape(size = 6.dp)
+                    Spacer(Modifier)
+                    PhoneNumberField(
+                        value = uiState.contactInfo.phone,
+                        onValueChange = { onEvent(Ui.Event.PhoneChanged(it)) },
+                        label = stringResource(R.string.booking_client_phone),
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = uiState.highlightEmptyFields && !uiState.contactInfo.isValidPhone()
+                    )
+                    CommonTextField(
+                        value = uiState.contactInfo.email,
+                        onValueChange = { onEvent(Ui.Event.EmailChanged(it)) },
+                        label = stringResource(R.string.booking_client_email),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = uiState.contactInfo.showEmailValidationError,
+                    )
+                    Text(
+                        text = stringResource(R.string.booking_privacy_notice),
+                        style = MaterialTheme.typography.bodySmall.copy(
+                            fontWeight = FontWeight(400),
+                            color = LightGrayText
+                        )
+                    )
+                }
+            }
+            itemsIndexed(uiState.tourists) { i, card ->
+                val ordinal = (i + 1).toOrdinal().replaceFirstChar { it.uppercase() }
+                AnimateAppearance(initiallyVisible = !card.isEmpty || i != uiState.tourists.lastIndex) {
+                    TouristCard(
+                        card,
+                        stringResource(R.string.booking_tourist_card_title, ordinal),
+                        uiState.highlightEmptyFields && (!card.isEmpty || i == 0),
+                        { onEvent(Ui.Event.TouristChanged.ExpansionToggled(i)) },
+                        { onEvent(Ui.Event.TouristChanged.NameChanged(it, i)) },
+                        { onEvent(Ui.Event.TouristChanged.SurnameChanged(it, i)) },
+                        { onEvent(Ui.Event.TouristChanged.BirthdayChanged(it, i)) },
+                        { onEvent(Ui.Event.TouristChanged.CitizenshipChanged(it, i)) },
+                        { onEvent(Ui.Event.TouristChanged.InternationalPassportCodeChanged(it, i)) },
+                        {
+                            onEvent(
+                                Ui.Event.TouristChanged
+                                    .InternationalPassportExpirationDateChanged(it, i)
                             )
-                            .size(32.dp)
+                        },
+                    )
+                }
+            }
+
+            item {
+                WideCard(
+                    Modifier.padding(vertical = 16.dp),
+                    shape = RoundedCornerShape(16.dp),
+                ) {
+                    Row(
+                        Modifier.height(32.dp),
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            Icons.Default.Add, null,
-                            tint = MaterialTheme.colorScheme.surface
+                        Text(
+                            text = stringResource(R.string.booking_add_tourist),
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Spacer(Modifier.weight(1f))
+                        IconButton(
+                            { onEvent(Ui.Event.AddTourist) },
+                            Modifier
+                                .padding(end = 8.dp)
+                                .background(
+                                    MaterialTheme.colorScheme.primary,
+                                    RoundedCornerShape(size = 6.dp)
+                                )
+                                .size(32.dp)
+                        ) {
+                            Icon(
+                                Icons.Default.Add, null,
+                                tint = MaterialTheme.colorScheme.surface
+                            )
+                        }
+                    }
+                }
+            }
+
+            item {
+                WideCard(
+                    Modifier.padding(vertical = 16.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    PriceList(bookingDetails.prices)
+                }
+            }
+
+            item {
+                WideCard(
+                    shape = RectangleShape,
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .padding(vertical = 12.dp)
+                            .height(48.dp),
+                        shape = RoundedCornerShape(25),
+                        onClick = { onEvent(Ui.Event.Submit) },
+                    ) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = stringResource(
+                                R.string.book_room_button,
+                                bookingDetails.prices.total
+                            ),
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                lineHeight = 17.6.sp,
+                                textAlign = TextAlign.Center,
+                                letterSpacing = 0.1.sp,
+                            )
                         )
                     }
                 }
             }
         }
 
-        item {
-            WideCard(
-                Modifier.padding(vertical = 16.dp),
-                shape = RoundedCornerShape(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                PriceList(bookingDetails.prices)
-            }
+        val onConsumed: (EffectKey) -> Unit = { onEvent(Ui.Event.EffectConsumed(it)) }
+        val context = LocalContext.current.applicationContext
+        SideEffect<Ui.SideEffect.GoNext>(uiState.sideEffectsHolder, onConsumed, true) {
+            navController.navigate(OrderPaidScreenDestination)
         }
-
-        item {
-            WideCard(
-                shape = RectangleShape,
-            ) {
-                Button(
-                    modifier = Modifier
-                        .padding(vertical = 12.dp)
-                        .height(48.dp),
-                    shape = RoundedCornerShape(25),
-                    onClick = { navController.navigate(OrderPaidScreenDestination) },
-                ) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(
-                            R.string.book_room_button,
-                            bookingDetails.prices.total
-                        ),
-                        style = MaterialTheme.typography.bodyMedium.copy(
-                            lineHeight = 17.6.sp,
-                            textAlign = TextAlign.Center,
-                            letterSpacing = 0.1.sp,
-                        )
-                    )
-                }
-            }
+        SideEffect<Ui.SideEffect.ShowError>(
+            uiState.sideEffectsHolder, onConsumed,
+            false, snackbarState
+        ) {
+            snackbarState.showSnackbar(context.getString(R.string.booking_error_empty_fields))
         }
     }
 }
@@ -276,6 +302,7 @@ private fun Int.toOrdinal() = MessageFormat(
 private fun TouristCard(
     state: TouristPresentationDTO,
     title: String,
+    highlightEmptyFields: Boolean = false,
     onExpansionToggle: () -> Unit,
     onNameChange: (String) -> Unit,
     onSurnameChange: (String) -> Unit,
@@ -307,36 +334,44 @@ private fun TouristCard(
                     onValueChange = onNameChange,
                     label = stringResource(R.string.booking_tourist_name),
                     modifier = Modifier.fillMaxWidth(),
+                    isError = state.name.isBlank() && highlightEmptyFields,
                 )
                 CommonTextField(
                     value = state.surname,
                     onValueChange = onSurnameChange,
                     label = stringResource(R.string.booking_tourist_surname),
                     modifier = Modifier.fillMaxWidth(),
+                    isError = state.surname.isBlank() && highlightEmptyFields,
                 )
                 CommonTextField(
                     value = state.birthday,
                     onValueChange = onBirthdayChange,
                     label = stringResource(R.string.booking_tourist_birthday),
                     modifier = Modifier.fillMaxWidth(),
+                    isError = state.birthday.isBlank() && highlightEmptyFields,
                 )
                 CommonTextField(
                     value = state.citizenship,
                     onValueChange = onCitizenshipChange,
                     label = stringResource(R.string.booking_tourist_citizenship),
                     modifier = Modifier.fillMaxWidth(),
+                    isError = state.citizenship.isBlank() && highlightEmptyFields,
                 )
                 CommonTextField(
                     value = state.internationalPassportCode,
                     onValueChange = onInternationalPassportCodeChange,
                     label = stringResource(R.string.booking_tourist_international_passport_code),
                     modifier = Modifier.fillMaxWidth(),
+                    isError = state.internationalPassportCode.isBlank()
+                            && highlightEmptyFields,
                 )
                 CommonTextField(
                     value = state.internationalPassportExpirationDate,
                     onValueChange = onInternationalPassportExpirationDateChanged,
                     label = stringResource(R.string.booking_tourist_international_passport_expiration_date),
                     modifier = Modifier.fillMaxWidth(),
+                    isError = state.internationalPassportExpirationDate.isBlank()
+                            && highlightEmptyFields,
                 )
             }
         }
