@@ -78,6 +78,7 @@ fun HotelScreen(
                         text = stringResource(R.string.hotel_minimal_price, details.minimalPrice),
                         style = MaterialTheme.typography.bodyLarge
                     )
+                    Spacer(modifier = Modifier.width(8.dp))
                     OneLineText(
                         modifier = Modifier.height(21.dp),
                         text = details.priceDescription,
@@ -160,7 +161,7 @@ fun HotelCard(hotel: HotelPresentationDTO) {
     Rating(hotel.rating)
     Text(
         text = hotel.name,
-        style = MaterialTheme.typography.titleMedium
+        style = MaterialTheme.typography.titleMedium,
     )
     OneLineText(
         text = hotel.address,
@@ -233,7 +234,6 @@ private fun HotelTags(tags: List<String>) {
 fun Rating(rating: RatingPresentationDTO) {
     Row(
         Modifier
-            .width(149.dp)
             .height(29.dp)
             .background(color = Color(0x33FFC700), shape = RoundedCornerShape(size = 5.dp))
             .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 5.dp),

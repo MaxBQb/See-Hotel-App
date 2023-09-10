@@ -2,7 +2,6 @@ package com.example.chotel.presentation.screen.booking
 
 import android.icu.text.MessageFormat
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,9 +56,9 @@ import com.example.chotel.presentation.theme.LightGrayText
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.navigate
 import org.koin.androidx.compose.getViewModel
+import java.util.Locale
 import com.example.chotel.presentation.screen.booking.BookingContract as Ui
 
-@OptIn(ExperimentalFoundationApi::class)
 @Destination
 @Composable
 fun BookingScreen(
@@ -123,12 +121,14 @@ fun BookingScreen(
                     value = uiState.contactInfo.phone,
                     onValueChange = { onEvent(Ui.Event.PhoneChanged(it)) },
                     label = stringResource(R.string.booking_client_phone),
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 CommonTextField(
                     value = uiState.contactInfo.email,
                     onValueChange = { onEvent(Ui.Event.EmailChanged(it)) },
                     label = stringResource(R.string.booking_client_email),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 Text(
                     text = stringResource(R.string.booking_privacy_notice),
@@ -267,7 +267,8 @@ private fun PriceList(prices: RoomBookingDetailsPresentationDTO.Prices) {
 @Composable
 private fun Int.toOrdinal() = MessageFormat(
     "{0,spellout,%spellout-ordinal-masculine}",
-    LocalContext.current.resources.configuration.locales[0]
+    Locale("ru-ru"),
+//  LocalContext.current.resources.configuration.locales[0] // For any locale
 ).format(arrayOf(this))
 
 
@@ -305,31 +306,37 @@ private fun TouristCard(
                     value = state.name,
                     onValueChange = onNameChange,
                     label = stringResource(R.string.booking_tourist_name),
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 CommonTextField(
                     value = state.surname,
                     onValueChange = onSurnameChange,
                     label = stringResource(R.string.booking_tourist_surname),
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 CommonTextField(
                     value = state.birthday,
                     onValueChange = onBirthdayChange,
                     label = stringResource(R.string.booking_tourist_birthday),
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 CommonTextField(
                     value = state.citizenship,
                     onValueChange = onCitizenshipChange,
                     label = stringResource(R.string.booking_tourist_citizenship),
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 CommonTextField(
                     value = state.internationalPassportCode,
                     onValueChange = onInternationalPassportCodeChange,
                     label = stringResource(R.string.booking_tourist_international_passport_code),
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 CommonTextField(
                     value = state.internationalPassportExpirationDate,
                     onValueChange = onInternationalPassportExpirationDateChanged,
                     label = stringResource(R.string.booking_tourist_international_passport_expiration_date),
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }

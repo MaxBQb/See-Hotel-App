@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -35,7 +34,6 @@ fun ImageSlider(models: List<*>) = Box {
         initialPageOffsetFraction = 0f
     ) { models.size }
     HorizontalPager(
-        modifier = Modifier,
         state = pagerState,
         pageSpacing = 24.dp,
     ) {
@@ -44,7 +42,6 @@ fun ImageSlider(models: List<*>) = Box {
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .width(343.dp)
                 .height(257.dp)
                 .clip(RoundedCornerShape(5))
         )

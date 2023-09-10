@@ -26,6 +26,7 @@
         <item quantity="one">%d ночь</item>
         <item quantity="few">%d ночи</item>
         <item quantity="many">%d ночей</item>
+        <item quantity="other">%d ночей</item>
     </plurals>
     <string name="booking_hotel_name">Отель</string>
     <string name="booking_room_description">Номер</string>
