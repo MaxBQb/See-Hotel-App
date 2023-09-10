@@ -54,6 +54,14 @@ android {
 }
 
 dependencies {
+    // Dependency Injection
+    val koin_annotations_version = "1.0.1"
+    val koin_version = "3.4.2"
+    implementation("io.insert-koin:koin-android:$koin_version")
+    implementation("io.insert-koin:koin-androidx-compose:3.4.5")
+    implementation("io.insert-koin:koin-annotations:$koin_annotations_version")
+    ksp("io.insert-koin:koin-ksp-compiler:$koin_annotations_version")
+
     // JC Navigation
     val destination_version = "1.8.42-beta" // Latest compatible with JC 1.4.x
     implementation("io.github.raamcosta.compose-destinations:core:$destination_version")
@@ -61,6 +69,12 @@ dependencies {
 
     // Images view
     implementation("io.coil-kt:coil-compose:2.4.0")
+
+    // Retrofit2 Networking
+    val retrofit_version = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
+    implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
+    implementation("com.google.code.gson:gson:2.10.1")
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")

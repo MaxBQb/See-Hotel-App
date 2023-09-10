@@ -14,11 +14,6 @@
     <!--  Rooms  -->
     <string name="room_details">Подробнее о номере</string>
     <string name="room_booking_button">Выбрать номер</string>
-    <plurals name="room_price_for_n_nights">
-        <item quantity="one">за ночь с перелётом</item>
-        <item quantity="few">за %d ночи с перелётом</item>
-        <item quantity="many">за %d ночей с перелётом</item>
-    </plurals>
 
     <!--  Booking  -->
     <string name="book_room_button">Оплатить %1$s</string>
@@ -27,6 +22,11 @@
     <string name="booking_arrival">Страна, город</string>
     <string name="booking_tour_dates">Даты</string>
     <string name="booking_nights_amount">Кол-во ночей</string>
+    <plurals name="booking_nights_amount">
+        <item quantity="one">%d ночь</item>
+        <item quantity="few">%d ночи</item>
+        <item quantity="many">%d ночей</item>
+    </plurals>
     <string name="booking_hotel_name">Отель</string>
     <string name="booking_room_description">Номер</string>
     <string name="booking_nutrition">Питание</string>

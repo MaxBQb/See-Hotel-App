@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -30,7 +29,7 @@ import kotlin.math.absoluteValue
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-fun ImageSlider(models: List<*>, placeholder: Painter) = Box {
+fun ImageSlider(models: List<*>) = Box {
     val pagerState = rememberPagerState(
         initialPage = 0,
         initialPageOffsetFraction = 0f
@@ -38,11 +37,10 @@ fun ImageSlider(models: List<*>, placeholder: Painter) = Box {
     HorizontalPager(
         modifier = Modifier,
         state = pagerState,
+        pageSpacing = 24.dp,
     ) {
         AsyncImage(
             model = models[it],
-            placeholder = placeholder,
-            fallback = placeholder,
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier

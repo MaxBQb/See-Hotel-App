@@ -23,6 +23,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,12 +41,14 @@ import com.example.chotel.presentation.components.CommonScaffold
 import com.example.chotel.presentation.components.ImageSlider
 import com.example.chotel.presentation.components.OneLineText
 import com.example.chotel.presentation.components.WideCard
+import com.example.chotel.presentation.model.HotelPresentationDTO
+import com.example.chotel.presentation.model.RatingPresentationDTO
 import com.example.chotel.presentation.screen.destinations.RoomsScreenDestination
 import com.example.chotel.presentation.theme.LightGrayText
-import com.example.chotel.presentation.utils.Rub
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.navigate
+import org.koin.androidx.compose.getViewModel
 
 
 @RootNavGraph(start = true)
@@ -52,7 +56,10 @@ import com.ramcosta.composedestinations.navigation.navigate
 @Composable
 fun HotelScreen(
     navController: NavController,
+    viewModel: HotelViewModel = getViewModel(),
 ) = CommonScaffold(title = stringResource(R.string.hotel_screen_title)) {
+    val uiState by viewModel.uiState.collectAsState()
+    val details = uiState.hotelDetails ?: return@CommonScaffold
     LazyColumn(
         Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -62,28 +69,18 @@ fun HotelScreen(
                 Modifier.padding(bottom = 16.dp),
                 shape = RoundedCornerShape(bottomStart = 16.dp, bottomEnd = 16.dp),
             ) {
-                ImageSlider(listOf(null, null, null, null, null), painterResource(R.drawable.hotel_preview))
+                ImageSlider(details.images)
                 Spacer(Modifier.height(16.dp))
-                Rating(5)
-                Text(
-                    text = "Steigenberger Makadi",
-                    style = MaterialTheme.typography.titleMedium
-                )
-                OneLineText(
-                    text = "Madinat Makadi, Safaga Road, Makadi Bay, Египет",
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                )
+                HotelCard(details.hotel)
                 Row(verticalAlignment = Alignment.Bottom) {
                     OneLineText(
                         modifier = Modifier.height(36.dp),
-                        text = stringResource(R.string.hotel_minimal_price, 134673.Rub),
+                        text = stringResource(R.string.hotel_minimal_price, details.minimalPrice),
                         style = MaterialTheme.typography.bodyLarge
                     )
                     OneLineText(
                         modifier = Modifier.height(21.dp),
-                        text = "за тур с перелётом",
+                        text = details.priceDescription,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = LightGrayText,
                             fontWeight = FontWeight(400),
@@ -102,14 +99,9 @@ fun HotelScreen(
                     text = stringResource(R.string.hotel_description),
                     style = MaterialTheme.typography.titleMedium
                 )
-                HotelTags(
-                    listOf(
-                        "3-я линия", "Платный Wi-Fi в фойе",
-                        "30 км до аэропорта", "1 км до пляжа"
-                    )
-                )
+                HotelTags(details.features)
                 Text(
-                    text = "Отель VIP-класса с собственными гольф полями. Высокий уровнь сервиса. Рекомендуем для респектабельного отдыха. Отель принимает гостей от 18 лет!",
+                    text = details.description,
                     style = MaterialTheme.typography.bodyMedium.copy(
                         color = Color(0xE5000000),
                         fontWeight = FontWeight(400),
@@ -144,7 +136,9 @@ fun HotelScreen(
                         .padding(vertical = 12.dp)
                         .height(48.dp),
                     shape = RoundedCornerShape(25),
-                    onClick = { navController.navigate(RoomsScreenDestination) },
+                    onClick = {
+                        navController.navigate(RoomsScreenDestination(details.hotel.name))
+                    },
                 ) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
@@ -159,6 +153,21 @@ fun HotelScreen(
             }
         }
     }
+}
+
+@Composable
+fun HotelCard(hotel: HotelPresentationDTO) {
+    Rating(hotel.rating)
+    Text(
+        text = hotel.name,
+        style = MaterialTheme.typography.titleMedium
+    )
+    OneLineText(
+        text = hotel.address,
+        style = MaterialTheme.typography.bodySmall.copy(
+            color = MaterialTheme.colorScheme.primary,
+        )
+    )
 }
 
 @Composable
@@ -221,19 +230,19 @@ private fun HotelTags(tags: List<String>) {
 }
 
 @Composable
-fun Rating(rating: Int) {
+fun Rating(rating: RatingPresentationDTO) {
     Row(
         Modifier
             .width(149.dp)
             .height(29.dp)
-            .background(color = Color(0x33FFC700), shape = RoundedCornerShape(size = rating.dp))
-            .padding(start = 10.dp, top = rating.dp, end = 10.dp, bottom = rating.dp),
+            .background(color = Color(0x33FFC700), shape = RoundedCornerShape(size = 5.dp))
+            .padding(start = 10.dp, top = 5.dp, end = 10.dp, bottom = 5.dp),
         horizontalArrangement = Arrangement.spacedBy(2.dp, Alignment.Start),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(Icons.Default.Star, null, tint = Color(0xFFFFA800))
         Text(
-            text = "$rating Превосходно",
+            text = rating.value,
             style = MaterialTheme.typography.bodyMedium.copy(
                 color = Color(0xFFFFA800),
                 textAlign = TextAlign.Center,

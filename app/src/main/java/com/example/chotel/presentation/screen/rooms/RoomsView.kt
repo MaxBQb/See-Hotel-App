@@ -23,11 +23,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -41,61 +41,60 @@ import com.example.chotel.presentation.components.OneLineText
 import com.example.chotel.presentation.components.WideCard
 import com.example.chotel.presentation.screen.destinations.BookingScreenDestination
 import com.example.chotel.presentation.theme.LightGrayText
-import com.example.chotel.presentation.utils.Rub
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.navigate
+import org.koin.androidx.compose.getViewModel
 
 
 @Destination
 @Composable
 fun RoomsScreen(
+    title: String,
     navController: NavController,
-) = CommonScaffold("Steigenberger Makadi", navController) {
+    viewModel: RoomsViewModel = getViewModel()
+) = CommonScaffold(title, navController) {
+    val uiState by viewModel.uiState.collectAsState()
+    val rooms = uiState.rooms
     LazyColumn(
         Modifier.fillMaxSize(),
         contentPadding = PaddingValues(vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(listOf(null, null)) {
+        items(rooms) {room ->
             WideCard(
                 Modifier.padding(vertical = 16.dp),
                 shape = RoundedCornerShape(16.dp),
             ) {
-                ImageSlider(
-                    arrayOfNulls<String>(5).toList(),
-                    painterResource(R.drawable.hotel_room_preview)
-                )
+                ImageSlider(room.images)
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    text = "Стандартный с видом на бассейн или сад",
+                    text = room.name,
                     style = MaterialTheme.typography.titleMedium
                 )
-                HotelTags(listOf("Все включено", "Кондиционер"))
+                RoomTags(room.features)
+                Spacer(Modifier.height(8.dp))
                 Details(stringResource(R.string.room_details))
-                Spacer(Modifier)
+                Spacer(Modifier.height(16.dp))
                 Row(verticalAlignment = Alignment.Bottom) {
                     OneLineText(
                         modifier = Modifier
                             .height(36.dp)
                             .padding(end = 8.dp),
-                        text = 186600.Rub,
+                        text = room.price,
                         style = MaterialTheme.typography.bodyLarge
                     )
                     OneLineText(
                         modifier = Modifier.height(21.dp),
-                        text = pluralStringResource(
-                            R.plurals.room_price_for_n_nights, 7, 7
-                        ),
+                        text = room.priceNote,
                         style = MaterialTheme.typography.bodyMedium.copy(
                             color = LightGrayText,
                             fontWeight = FontWeight(400),
                         )
                     )
                 }
+                Spacer(Modifier.height(16.dp))
                 Button(
-                    modifier = Modifier
-                        .padding(top = 12.dp)
-                        .height(48.dp),
+                    modifier = Modifier.height(48.dp),
                     shape = RoundedCornerShape(25),
                     onClick = { navController.navigate(BookingScreenDestination) },
                 ) {
@@ -142,7 +141,7 @@ private fun Details(title: String) {
 
 @Composable
 @OptIn(ExperimentalLayoutApi::class)
-private fun HotelTags(tags: List<String>) {
+private fun RoomTags(tags: List<String>) {
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.Start),
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.Top),
