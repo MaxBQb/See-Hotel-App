@@ -15,4 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "CHotel"
 include(":app")
- 
+include(":domain")
+include(":data")

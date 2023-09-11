@@ -1,20 +1,19 @@
 package com.example.chotel.presentation.model.mapper
 
-import com.example.chotel.domain.model.RoomBookingDetails
 import com.example.chotel.domain.model.mapper.map
 import com.example.chotel.presentation.model.RoomBookingDetailsPresentationDTO
 import com.example.chotel.presentation.utils.Rub
 import org.koin.core.annotation.Factory
 
 fun interface ToPresentationRoomBookingMapper :
-    ToPresentationMapper<RoomBookingDetails, RoomBookingDetailsPresentationDTO>
+    ToPresentationMapper<com.example.chotel.domain.model.RoomBookingDetails, RoomBookingDetailsPresentationDTO>
 
 fun interface ToPresentationRoomBookingPricesMapper : ToPresentationMapper<
-        RoomBookingDetails.Prices, RoomBookingDetailsPresentationDTO.Prices>
+        com.example.chotel.domain.model.RoomBookingDetails.Prices, RoomBookingDetailsPresentationDTO.Prices>
 
 @Factory
 class ToPresentationRoomBookingPricesMapperImpl : ToPresentationRoomBookingPricesMapper {
-    override fun RoomBookingDetails.Prices.map()
+    override fun com.example.chotel.domain.model.RoomBookingDetails.Prices.map()
         = RoomBookingDetailsPresentationDTO.Prices(
             fuel = fuel.Rub,
             service = service.Rub,
@@ -28,7 +27,7 @@ class ToPresentationRoomBookingMapperImpl(
     private val hotelMapper: ToPresentationHotelMapper,
     private val pricesMapper: ToPresentationRoomBookingPricesMapper,
 ) : ToPresentationRoomBookingMapper {
-    override fun RoomBookingDetails.map() = RoomBookingDetailsPresentationDTO(
+    override fun com.example.chotel.domain.model.RoomBookingDetails.map() = RoomBookingDetailsPresentationDTO(
         arrivalCountry = arrivalCountry,
         departureCountry = departureCountry,
         hotel = hotelMapper.map(hotel),

@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.devtools.ksp") version "1.8.10-1.0.9"
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -54,13 +54,13 @@ android {
 }
 
 dependencies {
+    implementation(project(mapOf("path" to ":domain")))
+    implementation(project(mapOf("path" to ":data")))
     // Dependency Injection
-    val koin_annotations_version = "1.0.1"
-    val koin_version = "3.4.2"
-    implementation("io.insert-koin:koin-android:$koin_version")
-    implementation("io.insert-koin:koin-androidx-compose:3.4.5")
-    implementation("io.insert-koin:koin-annotations:$koin_annotations_version")
-    ksp("io.insert-koin:koin-ksp-compiler:$koin_annotations_version")
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin)
+    ksp(libs.koinKSP)
 
     // JC Navigation
     val destination_version = "1.8.42-beta" // Latest compatible with JC 1.4.x

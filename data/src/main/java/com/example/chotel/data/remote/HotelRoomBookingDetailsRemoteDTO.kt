@@ -1,4 +1,4 @@
-package com.example.chotel.data.model.remote
+package com.example.chotel.data.remote
 
 import com.google.gson.annotations.SerializedName
 

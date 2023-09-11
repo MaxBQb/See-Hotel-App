@@ -1,7 +1,6 @@
 package com.example.chotel.presentation.screen.booking
 
 import com.example.chotel.domain.model.mapper.map
-import com.example.chotel.domain.repository.HotelRepository
 import com.example.chotel.presentation.model.ContactInfoPresentationDTO
 import com.example.chotel.presentation.model.TouristPresentationDTO
 import com.example.chotel.presentation.model.mapper.PresentationMappers
@@ -16,7 +15,7 @@ import com.example.chotel.presentation.screen.booking.BookingContract as Ui
 
 @KoinViewModel
 class BookingViewModel(
-    hotelRepository: HotelRepository,
+    hotelRepository: com.example.chotel.domain.repository.HotelRepository,
     mappers: PresentationMappers,
 ) : BaseViewModel<Ui.State, Ui.Event, Ui.SideEffect>() {
     override fun getInitialState() = Ui.State()

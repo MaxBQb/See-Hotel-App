@@ -2,7 +2,8 @@ package com.example.chotel.presentation
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.chotel.di.StaticDIModule
+import com.example.chotel.data.di.DataDIModule
+import com.example.chotel.presentation.di.PresentationDIModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -18,7 +19,11 @@ class App : Application() {
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(this@App)
-            modules(StaticDIModule().module)
+            modules(
+                PresentationDIModule().module,
+                DataDIModule().module,
+//                DomainDIModule().module, // Nothing to inject for now
+            )
         }
     }
 }

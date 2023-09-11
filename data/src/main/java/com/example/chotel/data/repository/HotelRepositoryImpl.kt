@@ -1,7 +1,7 @@
 package com.example.chotel.data.repository
 
-import com.example.chotel.data.datasource.remote.HotelRemoteDataSource
-import com.example.chotel.data.model.remote.mapper.RemoteMappers
+import com.example.chotel.data.remote.HotelRemoteDataSource
+import com.example.chotel.data.remote.mapper.RemoteMappers
 import com.example.chotel.domain.model.mapper.map
 import com.example.chotel.domain.repository.HotelRepository
 import kotlinx.coroutines.flow.flow

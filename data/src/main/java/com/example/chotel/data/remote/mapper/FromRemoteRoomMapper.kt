@@ -1,6 +1,6 @@
-package com.example.chotel.data.model.remote.mapper
+package com.example.chotel.data.remote.mapper
 
-import com.example.chotel.data.model.remote.HotelRoomsRemoteDTO
+import com.example.chotel.data.remote.HotelRoomsRemoteDTO
 import com.example.chotel.domain.model.Room
 import com.example.chotel.domain.model.mapper.Mapper
 import com.example.chotel.domain.model.mapper.map
@@ -11,7 +11,7 @@ fun interface FromRemoteRoomsMapper : Mapper<HotelRoomsRemoteDTO, List<Room>>
 
 @Factory
 class FromRemoteRoomMapperImpl : FromRemoteRoomMapper {
-    override fun HotelRoomsRemoteDTO.Room.map() = Room(
+    override fun HotelRoomsRemoteDTO.Room.map() = com.example.chotel.domain.model.Room(
         id = id,
         images = images,
         name = name,

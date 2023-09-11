@@ -1,4 +1,4 @@
-package com.example.chotel.data.model.remote.mapper
+package com.example.chotel.data.remote.mapper
 
 import org.koin.core.annotation.Factory
 

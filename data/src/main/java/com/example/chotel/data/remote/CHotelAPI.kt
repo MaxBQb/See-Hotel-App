@@ -1,8 +1,5 @@
-package com.example.chotel.data.datasource.remote
+package com.example.chotel.data.remote
 
-import com.example.chotel.data.model.remote.HotelRemoteDTO
-import com.example.chotel.data.model.remote.HotelRoomBookingDetailsRemoteDTO
-import com.example.chotel.data.model.remote.HotelRoomsRemoteDTO
 import retrofit2.http.GET
 
 interface CHotelAPI {
