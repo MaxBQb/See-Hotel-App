@@ -4,7 +4,8 @@
 # Экраны приложения
 ![](/demo/demo.png)
 
-# Демонстрация работоспособности [здесь](https://raw.githubusercontent.com/MaxBQb/See-Hotel-App/master/demo/Demo.mp4)
+# Демонстрация работоспособности
+https://github.com/MaxBQb/See-Hotel-App/assets/27343275/d9cd8d94-7fbf-43eb-9164-36094b8b9aad
 
 # Стек
 - Jetpack Compose
